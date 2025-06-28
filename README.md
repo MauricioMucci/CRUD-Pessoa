@@ -6,3 +6,9 @@ Leia com atenção toda a documentação com os requisitos da prova que foi envi
 Lembrando que a configuração da prova fica a cargo do candidato, a realizar de acordo com os requisitos repassados ao candidato.  
   
 Registrar nesse arquivo o que foi realizado da prova, as tecnologias utilizadas, o que não foi possível fazer e alguma observação que achar importante.  
+
+## 💻 Tecnologias
+
+- Java 17
+- Apache Maven
+- Postgres Database
