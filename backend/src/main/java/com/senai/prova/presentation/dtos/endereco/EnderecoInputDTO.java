@@ -13,4 +13,22 @@ public record EnderecoInputDTO(
         @NotBlank String cidade,
         @NotBlank String estado
 ) {
+
+    public EnderecoInputDTO(ViaCepDTO viaCepDTO, Integer numero) {
+        this(
+                cleanAndParseCep(viaCepDTO.cep()),
+                viaCepDTO.rua(),
+                numero,
+                viaCepDTO.cidade(),
+                viaCepDTO.estado()
+        );
+    }
+
+    private static @NotNull Integer cleanAndParseCep(String cep) {
+        try {
+            return Integer.valueOf(cep.replaceAll("[^0-9]", ""));
+        } catch (NumberFormatException e) {
+            return Integer.valueOf("0");
+        }
+    }
 }

@@ -25,17 +25,13 @@ public class ViaCepClient {
     private final ObjectMapper objectMapper;
 
     public Optional<ViaCepDTO> getViaCepDTO(String cep) throws Exception {
-        cep = cleanCepString(cep);
-        if (cep.isBlank()) {
-            log.warn("Erro ao limpar string de CEP: {}", cep);
-            return Optional.empty();
-        }
+        cep = cep.replaceAll("[^0-9]", "");
 
         HttpURLConnection connection = getHttpURLConnection(cep);
 
         int responseCode = connection.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            log.warn("Erro ao buscar CEP {}: Código de resposta HTTP {}", cep, responseCode);
+            log.warn("Erro ao buscar CEP [{}] - Código de resposta HTTP [{}]", cep, responseCode);
             return Optional.empty();
         }
 
@@ -47,14 +43,6 @@ public class ViaCepClient {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         return connection;
-    }
-
-    private String cleanCepString(String cep) {
-        cep = cep.replaceAll("[^0-9]", "");
-        if (cep.length() != 8) {
-            return "";
-        }
-        return cep;
     }
 
     private Optional<ViaCepDTO> tryToGetViaCepDTO(HttpURLConnection connection) {

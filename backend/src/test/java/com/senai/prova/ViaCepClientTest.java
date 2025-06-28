@@ -37,8 +37,18 @@ public class ViaCepClientTest {
     }
 
     @Test
-    void testViaCepDTOCepInvalido() throws Exception {
+    void testViaCepDTOPorCepInvalido() throws Exception {
         String cepInvalido = "00000000";
+
+        Optional<ViaCepDTO> maybeDTO = viaCepClient.getViaCepDTO(cepInvalido);
+        ViaCepDTO viaCepDTO = maybeDTO.orElse(null);
+
+        assertNull(viaCepDTO, "O dto não deve existir.");
+    }
+
+    @Test
+    void testViaCepDTOPorRequestInvalido() throws Exception {
+        String cepInvalido = "0";
 
         Optional<ViaCepDTO> maybeDTO = viaCepClient.getViaCepDTO(cepInvalido);
         ViaCepDTO viaCepDTO = maybeDTO.orElse(null);
