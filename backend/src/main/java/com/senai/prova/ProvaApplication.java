@@ -16,7 +16,7 @@ import java.util.TimeZone;
 @SpringBootApplication
 public class ProvaApplication implements ApplicationContextAware, ApplicationListener<ContextClosedEvent> {
 
-    private static final String UTC_ID = "UTC";
+    private static final String UTC_ID = "America/Sao_Paulo";
     private static ApplicationContext ctx;
 
     public static void main(String[] args) {
@@ -35,13 +35,10 @@ public class ProvaApplication implements ApplicationContextAware, ApplicationLis
                  \t\t\tApplication [{}] is running
                  Profile(s): \t{}
                  Timezone: \t\t[{}]
-                 Server : \t\t[{}:{}]
                  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%""",
                 env.getProperty("spring.application.name"),
                 env.getActiveProfiles(),
-                timeZone,
-                env.getProperty("server.address"),
-                env.getProperty("server.port"));
+                timeZone);
     }
 
     @Override
