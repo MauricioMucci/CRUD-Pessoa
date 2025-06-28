@@ -38,5 +38,5 @@ CREATE TABLE public.endereco
     estado      VARCHAR(255) NOT NULL,
     id_pessoa   INTEGER      NOT NULL,
     CONSTRAINT pk_endereco PRIMARY KEY (id_endereco),
-    CONSTRAINT fk_pessoa FOREIGN KEY (id_pessoa) REFERENCES pessoa
+    CONSTRAINT fk_pessoa FOREIGN KEY (id_pessoa) REFERENCES pessoa ON DELETE CASCADE
 );
