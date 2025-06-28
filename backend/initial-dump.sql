@@ -31,12 +31,13 @@ CREATE TRIGGER trg_pessoa_alteracao_registro
 CREATE TABLE public.endereco
 (
     id_endereco SERIAL4      NOT NULL,
-    cep         VARCHAR(8)   NOT NULL,
+    cep         INTEGER      NOT NULL,
     rua         VARCHAR(255) NOT NULL,
     numero      INTEGER      NOT NULL CHECK ( numero >= 0 ),
     cidade      VARCHAR(255) NOT NULL,
     estado      VARCHAR(255) NOT NULL,
     id_pessoa   INTEGER      NOT NULL,
     CONSTRAINT pk_endereco PRIMARY KEY (id_endereco),
-    CONSTRAINT fk_pessoa FOREIGN KEY (id_pessoa) REFERENCES pessoa ON DELETE CASCADE
+    CONSTRAINT fk_pessoa FOREIGN KEY (id_pessoa) REFERENCES pessoa
+        ON DELETE CASCADE
 );

@@ -37,9 +37,8 @@ public class Endereco {
     private Integer id;
 
     @NotNull
-    @Size(max = 8)
-    @Column(name = "cep", nullable = false, length = 8)
-    private String cep;
+    @Column(name = "cep", nullable = false)
+    private Integer cep;
 
     @NotNull
     @Size(max = 255)
