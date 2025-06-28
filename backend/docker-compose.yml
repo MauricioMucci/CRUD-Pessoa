@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres
+    container_name: senai-db
+    restart: on-failure
+    volumes:
+      - ./db-data:/var/lib/postgresql/data/
+      - ./initial-dump.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: senai
+    ports:
+      - "5432:5432"
+    networks:
+      - senai-network
+
+volumes:
+  db-data:
+    name: senai-db
+networks:
+  senai-network:
+    driver: bridge

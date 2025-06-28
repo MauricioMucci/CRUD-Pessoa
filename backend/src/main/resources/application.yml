@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: prova-senai
+  datasource:
+    url: jdbc:postgresql://localhost:5432/senai
+    username: rokamoka
+    password: teste123
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: HikariCP-Pool
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 180000
+      max-lifetime: 900000
+      connection-timeout: 3000
+      validation-timeout: 5000
+  jpa:
+    hibernate:
+      ddl-auto: none
