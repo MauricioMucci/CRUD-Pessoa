@@ -3,8 +3,8 @@ spring:
     name: prova-senai
   datasource:
     url: jdbc:postgresql://localhost:5432/senai
-    username: rokamoka
-    password: teste123
+    username: root
+    password: root
     driver-class-name: org.postgresql.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
