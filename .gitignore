@@ -37,3 +37,6 @@ hs_err_pid*
 # Compilation folders
 out
 target
+
+db-data/
+mvnw*
