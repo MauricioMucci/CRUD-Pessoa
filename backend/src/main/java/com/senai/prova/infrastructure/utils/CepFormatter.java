@@ -11,10 +11,16 @@ public class CepFormatter {
     private final String cep;
 
     public String format() {
+        if (this.cep == null) {
+            throw new IllegalStateException("CEP não pode ser nulo");
+        }
         return this.cep.replaceAll("(\\d{5})(\\d{3})", "$1-$2");
     }
 
     public String unformat() {
+        if (this.cep == null) {
+            throw new IllegalStateException("CEP não pode ser nulo");
+        }
         return this.cep.replaceAll("[^0-9]", "");
     }
 }
