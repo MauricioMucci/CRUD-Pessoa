@@ -1,4 +1,4 @@
-package com.senai.prova.infrastructure;
+package com.senai.prova.infrastructure.components;
 
 import java.io.BufferedReader;
 import java.io.IOException;

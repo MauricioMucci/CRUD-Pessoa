@@ -1,8 +1,7 @@
 package com.senai.prova;
 
-import com.senai.prova.infrastructure.ViaCepClient;
+import com.senai.prova.infrastructure.components.ViaCepClient;
 import com.senai.prova.presentation.dtos.endereco.ViaCepDTO;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

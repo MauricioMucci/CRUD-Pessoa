@@ -1,8 +1,7 @@
-package com.senai.prova.infrastructure;
+package com.senai.prova.infrastructure.handlers;
 
 import com.senai.prova.presentation.dtos.BadRequestDTO;
 import jakarta.validation.ConstraintViolationException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
