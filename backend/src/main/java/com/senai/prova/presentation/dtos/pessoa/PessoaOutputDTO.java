@@ -6,7 +6,6 @@ import com.senai.prova.infrastructure.constraints.NomeConstraint;
 import com.senai.prova.infrastructure.utils.CpfFormatter;
 import com.senai.prova.presentation.dtos.endereco.EnderecoDTO;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.br.CPF;
 
