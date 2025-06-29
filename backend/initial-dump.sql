@@ -40,11 +40,3 @@ CREATE TABLE public.endereco
         ON DELETE CASCADE,
     CONSTRAINT uq_id_pessoa UNIQUE (id_pessoa)
 );
-
-INSERT INTO pessoa (
-                   nome, nascimento, cpf, email, criacao_registro, alteracao_registro)
-VALUES (
-       'Mauricio', '2000-11-13', '466.758.398-37', 'mcmucci@inf.ufpel.edu.br', NOW(), NOW());
-INSERT INTO endereco (cep, rua, numero, cidade, estado, id_pessoa)
-VALUES (
-       '96020080', 'R. Andrade Neves', 1195, 'Pelotas', 'Rio Grande do Sul', 1);
