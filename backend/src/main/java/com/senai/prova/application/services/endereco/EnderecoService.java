@@ -4,6 +4,8 @@ import com.senai.prova.domain.entities.Endereco;
 import com.senai.prova.domain.entities.Pessoa;
 import com.senai.prova.domain.repositories.EnderecoRepository;
 import com.senai.prova.infrastructure.components.ViaCepClient;
+import com.senai.prova.presentation.dtos.acao.CreatePessoaDTO;
+import com.senai.prova.presentation.dtos.endereco.EnderecoDTO;
 import com.senai.prova.presentation.dtos.endereco.ViaCepDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +41,10 @@ public class EnderecoService implements IEnderecoService {
         } catch (IOException e) {
             throw new ServiceException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void create(Pessoa pessoa, EnderecoDTO enderecoDTO) {
+        enderecoRepository.save(new Endereco(pessoa, enderecoDTO));
     }
 }

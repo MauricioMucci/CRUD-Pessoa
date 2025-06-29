@@ -1,5 +1,6 @@
 package com.senai.prova.domain.entities;
 
+import com.senai.prova.presentation.dtos.endereco.EnderecoDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -7,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -63,6 +63,15 @@ public class Endereco {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_pessoa", nullable = false, unique = true)
     private Pessoa pessoa;
+
+    public Endereco(Pessoa pessoa, EnderecoDTO enderecoDTO) {
+        this.cep = enderecoDTO.cep();
+        this.rua = enderecoDTO.rua();
+        this.numero = enderecoDTO.numero();
+        this.cidade = enderecoDTO.cidade();
+        this.estado = enderecoDTO.estado();
+        this.pessoa = pessoa;
+    }
 
     @Override
     public final boolean equals(Object o) {
