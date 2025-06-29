@@ -39,5 +39,14 @@ CREATE TABLE public.endereco
     id_pessoa   INTEGER      NOT NULL,
     CONSTRAINT pk_endereco PRIMARY KEY (id_endereco),
     CONSTRAINT fk_pessoa FOREIGN KEY (id_pessoa) REFERENCES pessoa
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT uq_id_pessoa UNIQUE (id_pessoa)
 );
+
+INSERT INTO pessoa (
+                   nome, nascimento, cpf, email, criacao_registro, alteracao_registro)
+VALUES (
+       'Mauricio', '2000-11-13', '466.758.398-37', 'mcmucci@inf.ufpel.edu.br', now(), now());
+INSERT INTO endereco (cep, rua, numero, cidade, estado, id_pessoa)
+VALUES (
+       '96020080', 'R. Andrade Neves', 1195, 'Pelotas', 'Rio Grande do Sul', 1);
