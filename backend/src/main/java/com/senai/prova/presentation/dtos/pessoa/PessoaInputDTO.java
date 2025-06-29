@@ -1,10 +1,9 @@
 package com.senai.prova.presentation.dtos.pessoa;
 
+import com.senai.prova.infrastructure.constraints.EmailConstraint;
+import com.senai.prova.infrastructure.constraints.NomeConstraint;
 import com.senai.prova.presentation.dtos.endereco.EnderecoDTO;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.Instant;
@@ -13,10 +12,10 @@ import java.time.Instant;
  * @author MauricioMucci
  */
 public record PessoaInputDTO(
-        @NotBlank String nome,
-        @NotNull Instant nascimento,
+        @NomeConstraint String nome,
+        Instant nascimento,
         @CPF String cpf,
-        @NotNull @Email String email,
+        @EmailConstraint String email,
         @Valid EnderecoDTO endereco
 ) {
 }

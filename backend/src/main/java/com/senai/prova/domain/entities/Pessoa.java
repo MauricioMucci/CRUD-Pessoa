@@ -1,5 +1,7 @@
 package com.senai.prova.domain.entities;
 
+import com.senai.prova.infrastructure.constraints.EmailConstraint;
+import com.senai.prova.infrastructure.constraints.NomeConstraint;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,23 +38,22 @@ public class Pessoa {
     @Column(name = "id_pessoa", nullable = false)
     private Long id;
 
+    @NomeConstraint
     @NotNull
     @Size(max = 255)
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @NotNull
-    @Column(name = "nascimento", nullable = false)
+    @Column(name = "nascimento")
     private LocalDate nascimento;
 
-    @NotNull
     @Size(max = 11)
-    @Column(name = "cpf", nullable = false, unique = true, length = 11)
+    @Column(name = "cpf", unique = true, length = 11)
     private String cpf;
 
-    @NotNull
+    @EmailConstraint
     @Size(max = 255)
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", unique = true)
     private String email;
 
     @NotNull

@@ -2,9 +2,9 @@ CREATE TABLE public.pessoa
 (
     id_pessoa          SERIAL4                                            NOT NULL,
     nome               VARCHAR(255)                                       NOT NULL,
-    nascimento         DATE                                               NOT NULL,
-    cpf                VARCHAR(11)                                        NOT NULL,
-    email              VARCHAR(255)                                       NOT NULL,
+    nascimento         DATE                                               NULL,
+    cpf                VARCHAR(11)                                        NULL,
+    email              VARCHAR(255)                                       NULL,
     criacao_registro   TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     alteracao_registro TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT pk_pessoa PRIMARY KEY (id_pessoa),
