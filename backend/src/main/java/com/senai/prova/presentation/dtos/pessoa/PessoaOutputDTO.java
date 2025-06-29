@@ -1,7 +1,7 @@
 package com.senai.prova.presentation.dtos.pessoa;
 
-import com.senai.prova.domain.entities.Endereco;
 import com.senai.prova.domain.entities.Pessoa;
+import com.senai.prova.infrastructure.utils.CpfFormatter;
 import com.senai.prova.presentation.dtos.endereco.EnderecoDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -29,7 +29,7 @@ public record PessoaOutputDTO(
         this(
                 pessoa.getNome(),
                 pessoa.getNascimento(),
-                pessoa.getCpf(),
+                new CpfFormatter(pessoa.getCpf()).format(),
                 pessoa.getEmail(),
                 endereco,
                 pessoa.getCriacaoRegistro(),

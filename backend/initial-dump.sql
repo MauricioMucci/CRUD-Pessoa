@@ -3,7 +3,7 @@ CREATE TABLE public.pessoa
     id_pessoa          SERIAL4                                            NOT NULL,
     nome               VARCHAR(255)                                       NOT NULL,
     nascimento         DATE                                               NOT NULL,
-    cpf                VARCHAR(14)                                        NOT NULL,
+    cpf                VARCHAR(11)                                        NOT NULL,
     email              VARCHAR(255)                                       NOT NULL,
     criacao_registro   TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     alteracao_registro TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -12,21 +12,19 @@ CREATE TABLE public.pessoa
     CONSTRAINT uk_pessoa_email UNIQUE (email)
 );
 
-CREATE
-OR REPLACE FUNCTION update_alteracao_registro_timestamp() RETURNS TRIGGER AS
+CREATE OR REPLACE FUNCTION update_alteracao_registro_timestamp() RETURNS TRIGGER AS
 $$
 BEGIN
-    NEW.alteracao_registro
-= CURRENT_TIMESTAMP;
-RETURN new;
+    new.alteracao_registro = CURRENT_TIMESTAMP;
+    RETURN new;
 END;
-$$
-LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_pessoa_alteracao_registro
     BEFORE UPDATE
     ON public.pessoa
-    FOR EACH ROW EXECUTE function update_alteracao_registro_timestamp();
+    FOR EACH ROW
+EXECUTE FUNCTION update_alteracao_registro_timestamp();
 
 CREATE TABLE public.endereco
 (
@@ -46,7 +44,7 @@ CREATE TABLE public.endereco
 INSERT INTO pessoa (
                    nome, nascimento, cpf, email, criacao_registro, alteracao_registro)
 VALUES (
-       'Mauricio', '2000-11-13', '466.758.398-37', 'mcmucci@inf.ufpel.edu.br', now(), now());
+       'Mauricio', '2000-11-13', '466.758.398-37', 'mcmucci@inf.ufpel.edu.br', NOW(), NOW());
 INSERT INTO endereco (cep, rua, numero, cidade, estado, id_pessoa)
 VALUES (
        '96020080', 'R. Andrade Neves', 1195, 'Pelotas', 'Rio Grande do Sul', 1);

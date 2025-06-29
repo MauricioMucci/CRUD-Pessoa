@@ -46,8 +46,8 @@ public class Pessoa {
     private LocalDate nascimento;
 
     @NotNull
-    @Size(max = 14)
-    @Column(name = "cpf", nullable = false, unique = true, length = 14)
+    @Size(max = 11)
+    @Column(name = "cpf", nullable = false, unique = true, length = 11)
     private String cpf;
 
     @NotNull

@@ -3,6 +3,7 @@ package com.senai.prova.application.services.pessoa;
 import com.senai.prova.application.services.endereco.IEnderecoService;
 import com.senai.prova.domain.entities.Pessoa;
 import com.senai.prova.domain.repositories.PessoaRepository;
+import com.senai.prova.infrastructure.utils.CpfFormatter;
 import com.senai.prova.presentation.dtos.endereco.EnderecoDTO;
 import com.senai.prova.presentation.dtos.pessoa.PessoaOutputDTO;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class PessoaService implements IPessoaService {
 
     @Override
     public Optional<PessoaOutputDTO> getPessoaByCpf(@CPF String cpf) {
-        return this.lookupPessoaByCpf(cpf)
+        return this.lookupPessoaByCpf(new CpfFormatter(cpf).unformat())
                 .map(this::buildPessoaOutputDTO);
     }
 
