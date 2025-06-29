@@ -7,13 +7,14 @@ import jakarta.validation.Valid;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
-  /**
+/**
  * @author MauricioMucci
  */
 public record PessoaInputDTO(
         @NomeConstraint String nome,
-        Instant nascimento,
+        LocalDate nascimento,
         @CPF String cpf,
         @EmailConstraint String email,
         @Valid EnderecoDTO endereco

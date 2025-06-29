@@ -6,4 +6,4 @@ import jakarta.validation.constraints.NotNull;
 /**
  * @author MauricioMucci
  */
-public record CreatePessoaDTO(@NotNull Integer idPessoa, @NotBlank String mensagem) {}
+public record CreatePessoaDTO(@NotNull Long idPessoa, @NotBlank String mensagem) {}
