@@ -15,16 +15,6 @@ public record EnderecoDTO(
         @NotBlank String estado
 ) {
 
-    public EnderecoDTO(ViaCepDTO viaCepDTO, Integer numero) {
-        this(
-                cleanAndParseCep(viaCepDTO.cep()),
-                viaCepDTO.rua(),
-                numero,
-                viaCepDTO.cidade(),
-                viaCepDTO.estado()
-        );
-    }
-
     public EnderecoDTO(Endereco endereco) {
         this(
                 endereco.getCep(),
@@ -33,13 +23,5 @@ public record EnderecoDTO(
                 endereco.getCidade(),
                 endereco.getEstado()
         );
-    }
-
-    private static @NotNull Integer cleanAndParseCep(String cep) {
-        try {
-            return Integer.valueOf(cep.replaceAll("[^0-9]", ""));
-        } catch (NumberFormatException e) {
-            return Integer.valueOf("0");
-        }
     }
 }

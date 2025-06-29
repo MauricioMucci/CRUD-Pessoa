@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.senai.prova.infrastructure.utils.CepFormatter;
 import com.senai.prova.presentation.dtos.endereco.ViaCepDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +25,9 @@ public class ViaCepClient {
     private static final String BASE_URL = "https://viacep.com.br/ws/%s/json/";
     private final ObjectMapper objectMapper;
 
-    public Optional<ViaCepDTO> getViaCepDTO(String cep) throws Exception {
-        cep = cep.replaceAll("[^0-9]", "");
+    public Optional<ViaCepDTO> getViaCepDTO(String cep) throws IOException {
+        cep = new CepFormatter(cep).unformat();
+        log.info("Buscando CEP através da API dos correios ({})", getFullUrl(cep));
 
         HttpURLConnection connection = getHttpURLConnection(cep);
 
@@ -38,8 +40,12 @@ public class ViaCepClient {
         return tryToGetViaCepDTO(connection);
     }
 
+    private String getFullUrl(String cep) {
+        return String.format(BASE_URL, cep);
+    }
+
     private HttpURLConnection getHttpURLConnection(String cep) throws IOException {
-        URL url = new URL(String.format(BASE_URL, cep));
+        URL url = new URL(getFullUrl(cep));
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         return connection;
@@ -59,6 +65,7 @@ public class ViaCepClient {
                 return Optional.empty();
             }
 
+            log.info("Busca realizada com sucesso [{}]", jsonString);
             return Optional.of(objectMapper.readValue(jsonString, ViaCepDTO.class));
         } catch (Exception e) {
             log.error("Erro ao transformar JSON para objeto ViaCepDTO", e);
