@@ -17,7 +17,7 @@ import java.util.Optional;
 @Validated
 public interface IPessoaService {
 
-    Optional<PessoaOutputDTO> getPessoaByCpf(@CPF String cpf);
+    PessoaOutputDTO getPessoaByCpf(@CPF String cpf);
 
     DeletePessoaDTO delete(@CPF String cpf);
 

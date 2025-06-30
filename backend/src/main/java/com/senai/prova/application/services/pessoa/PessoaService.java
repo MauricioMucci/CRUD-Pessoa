@@ -37,9 +37,12 @@ public class PessoaService implements IPessoaService {
     private final IEnderecoService enderecoService;
 
     @Override
-    public Optional<PessoaOutputDTO> getPessoaByCpf(@CPF String cpf) {
+    public PessoaOutputDTO getPessoaByCpf(@CPF String cpf) {
         return this.lookupPessoaByCpf(cpf)
-                .map(this::buildPessoaOutputDTO);
+                .map(this::buildPessoaOutputDTO)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("CPF (%s) não está vinculado a nenhuma pessoa.", cpf)
+                ));
     }
 
     private Optional<Pessoa> lookupPessoaByCpf(String cpf) {

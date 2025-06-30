@@ -30,7 +30,7 @@ public class PessoaController {
 
     @GetMapping(value = "/cpf/{cpf}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PessoaOutputDTO> getPessoaByCpf(@PathVariable String cpf) {
-        return ResponseEntity.of(pessoaService.getPessoaByCpf(cpf));
+        return ResponseEntity.ok(pessoaService.getPessoaByCpf(cpf));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
