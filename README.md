@@ -71,20 +71,22 @@ O projeto consiste em duas aplicações:
 
    Isso iniciará:
   - PostgreSQL na porta 5432
-  - RabbitMQ na porta 5672 (interface web na porta 15672)
+  - RabbitMQ na porta 15672
 
 3. **Execute o backend**:
    ```
    cd backend
-   mvn spring-boot:run
+   mvn spring-boot:run -Dspring.profiles.active=dev
    ```
 
 4. **Execute o frontend**:
    ```
    cd frontend
    npm install
-   npm start
+   npm run dev
    ```
+   
+Acesse o web app em: http://localhost:5173/
 
 ## 📝 Observações
 
