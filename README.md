@@ -76,7 +76,7 @@ O projeto consiste em duas aplicações:
 3. **Execute o backend**:
    ```
    cd backend
-   mvn spring-boot:run -Dspring.profiles.active=dev
+   mvn spring-boot:run -Dspring-boot.run.profiles=dev
    ```
 
 4. **Execute o frontend**:
