@@ -20,4 +20,6 @@ public interface IEnderecoService {
     Optional<EnderecoDTO> getEnderecoByCep(String cep);
 
     void create(@Valid Pessoa pessoa, @Valid EnderecoDTO enderecoDTO);
+
+    void update(@Valid Pessoa pessoa, @Valid EnderecoDTO enderecoDTO);
 }

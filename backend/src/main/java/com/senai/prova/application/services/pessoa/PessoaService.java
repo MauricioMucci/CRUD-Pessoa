@@ -6,7 +6,7 @@ import com.senai.prova.domain.repositories.PessoaRepository;
 import com.senai.prova.infrastructure.exceptions.BadRequestException;
 import com.senai.prova.infrastructure.exceptions.NotFoundException;
 import com.senai.prova.infrastructure.utils.CpfFormatter;
-import com.senai.prova.presentation.dtos.acao.CreatePessoaDTO;
+import com.senai.prova.presentation.dtos.acao.SavePessoaDTO;
 import com.senai.prova.presentation.dtos.acao.DeletePessoaDTO;
 import com.senai.prova.presentation.dtos.endereco.EnderecoDTO;
 import com.senai.prova.presentation.dtos.pessoa.PessoaInputDTO;
@@ -20,6 +20,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +62,7 @@ public class PessoaService implements IPessoaService {
 
     @Transactional
     @Override
-    public CreatePessoaDTO create(@Valid PessoaInputDTO pessoaDTO) {
+    public SavePessoaDTO create(@Valid PessoaInputDTO pessoaDTO) {
         log.info("Tentando criar pessoa com [{}]", pessoaDTO);
 
         String invalid = getInvalidationMessage(pessoaDTO);
@@ -71,7 +72,7 @@ public class PessoaService implements IPessoaService {
 
         Pessoa pessoa = pessoaRepository.save(new Pessoa(pessoaDTO));
         enderecoService.create(pessoa, pessoaDTO.endereco());
-        return new CreatePessoaDTO(
+        return new SavePessoaDTO(
                 pessoa.getId(),
                 String.format("Sucesso: %s cadastrado(a)", pessoa)
         );
@@ -83,6 +84,28 @@ public class PessoaService implements IPessoaService {
         List<PessoaOutputDTO> pessoaList = pessoaRepository.findAllDTO();
         log.info("Total de pessoas encontradas: {}", pessoaList.size());
         return pessoaList;
+    }
+
+    @Override
+    public SavePessoaDTO update(String cpf, PessoaInputDTO pessoaDTO) {
+        Pessoa pessoa = this.lookupPessoaByCpf(cpf)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("CPF (%s) não está vinculado a nenhuma pessoa.", cpf)
+                ));
+
+        log.info("Tentando atualizar pessoa [{}]", pessoa);
+
+        pessoa.setNome(pessoaDTO.nome());
+        pessoa.setEmail(pessoaDTO.email());
+        pessoa.setAlteracaoRegistro(Instant.now());
+
+        pessoa = pessoaRepository.save(pessoa);
+        enderecoService.update(pessoa, pessoaDTO.endereco());
+        return new SavePessoaDTO(
+                pessoa.getId(),
+                String.format("Sucesso: %s atualizado(a)", pessoa)
+        );
+
     }
 
     private String getInvalidationMessage(PessoaInputDTO pessoaDTO) {

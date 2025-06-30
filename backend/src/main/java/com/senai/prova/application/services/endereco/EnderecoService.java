@@ -4,9 +4,8 @@ import com.senai.prova.domain.entities.Endereco;
 import com.senai.prova.domain.entities.Pessoa;
 import com.senai.prova.domain.repositories.EnderecoRepository;
 import com.senai.prova.infrastructure.components.ViaCepClient;
-import com.senai.prova.presentation.dtos.acao.CreatePessoaDTO;
+import com.senai.prova.infrastructure.exceptions.BadRequestException;
 import com.senai.prova.presentation.dtos.endereco.EnderecoDTO;
-import com.senai.prova.presentation.dtos.endereco.ViaCepDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +44,31 @@ public class EnderecoService implements IEnderecoService {
 
     @Override
     public void create(Pessoa pessoa, EnderecoDTO enderecoDTO) {
+        Optional<EnderecoDTO> maybeEndereco = this.getEnderecoByCep(String.valueOf(enderecoDTO.cep()));
+        if (maybeEndereco.isEmpty()) {
+            throw new BadRequestException("O CEP informado é inválido");
+        }
         enderecoRepository.save(new Endereco(pessoa, enderecoDTO));
+    }
+
+    @Override
+    public void update(Pessoa pessoa, EnderecoDTO enderecoDTO) {
+        Optional<Endereco> maybeEndereco = enderecoRepository.findByPessoa(pessoa);
+        if (maybeEndereco.isEmpty()) {
+            throw new ServiceException("Pessoa salva sem endereço associado.");
+        }
+        Optional<EnderecoDTO> maybeEnderecoDTO = this.getEnderecoByCep(String.valueOf(enderecoDTO.cep()));
+        if (maybeEnderecoDTO.isEmpty()) {
+            throw new BadRequestException("O CEP informado é inválido");
+        }
+
+        Endereco endereco = maybeEndereco.get();
+        endereco.setCep(enderecoDTO.cep());
+        endereco.setNumero(enderecoDTO.numero());
+        endereco.setRua(enderecoDTO.rua());
+        endereco.setCidade(enderecoDTO.cidade());
+        endereco.setEstado(enderecoDTO.estado());
+
+        enderecoRepository.save(endereco);
     }
 }

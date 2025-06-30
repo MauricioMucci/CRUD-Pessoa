@@ -26,6 +26,9 @@ const initialFormState: PessoaInputDTO = {
 export const PersonForm: React.FC<PersonFormProps> = ({ onSave, initialData }) => {
     const [formData, setFormData] = useState<PessoaInputDTO>(initialFormState);
 
+    // Determina se o formulário está em modo de edição
+    const isEditing = !!initialData;
+
     useEffect(() => {
         if (initialData) {
             setFormData(initialData);
@@ -78,11 +81,11 @@ export const PersonForm: React.FC<PersonFormProps> = ({ onSave, initialData }) =
 
     return (
         <form onSubmit={handleSubmit} className="form-section">
-            <h2>Cadastro de Pessoa</h2>
+            <h2>{isEditing ? 'Editar Pessoa' : 'Cadastro de Pessoa'}</h2>
             <div className="form-grid">
                 <input name="nome" value={formData.nome} onChange={handleChange} placeholder="Nome" required />
-                <input name="nascimento" type="date" value={formData.nascimento} onChange={handleChange} placeholder="Data nascimento" required />
-                <input name="cpf" value={formData.cpf} onChange={handleChange} placeholder="CPF" required />
+                <input name="nascimento" type="date" value={formData.nascimento} onChange={handleChange} placeholder="Data nascimento" required disabled={isEditing}/>
+                <input name="cpf" value={formData.cpf} onChange={handleChange} placeholder="CPF" required disabled={isEditing} />
                 <input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="E-mail" required />
             </div>
 
@@ -109,7 +112,7 @@ export const PersonForm: React.FC<PersonFormProps> = ({ onSave, initialData }) =
                 </div>
             </fieldset>
 
-            <button type="submit" className="save-btn">Salvar</button>
+            <button type="submit" className="save-btn">{isEditing ? 'Atualizar' : 'Salvar'}</button>
         </form>
     );
 };

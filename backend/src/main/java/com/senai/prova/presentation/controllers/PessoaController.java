@@ -1,7 +1,7 @@
 package com.senai.prova.presentation.controllers;
 
 import com.senai.prova.application.services.pessoa.IPessoaService;
-import com.senai.prova.presentation.dtos.acao.CreatePessoaDTO;
+import com.senai.prova.presentation.dtos.acao.SavePessoaDTO;
 import com.senai.prova.presentation.dtos.acao.DeletePessoaDTO;
 import com.senai.prova.presentation.dtos.pessoa.PessoaInputDTO;
 import com.senai.prova.presentation.dtos.pessoa.PessoaOutputDTO;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -34,8 +35,13 @@ public class PessoaController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CreatePessoaDTO> create(@RequestBody PessoaInputDTO pessoaDTO) {
+    public ResponseEntity<SavePessoaDTO> create(@RequestBody PessoaInputDTO pessoaDTO) {
         return ResponseEntity.ok(pessoaService.create(pessoaDTO));
+    }
+
+    @PutMapping(value = "/cpf/{cpf}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SavePessoaDTO> update(@PathVariable String cpf, @RequestBody PessoaInputDTO pessoaDTO) {
+        return ResponseEntity.ok(pessoaService.update(cpf, pessoaDTO));
     }
 
     @DeleteMapping(value = "/cpf/{cpf}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -29,13 +29,17 @@ function App() {
 
     const handleSave = async (personData: PessoaInputDTO) => {
         try {
-            // Aqui você poderia adicionar uma lógica para diferenciar criação de edição
-            // Por exemplo, verificando se personToEdit não é nulo.
-            // O backend não provê um endpoint de UPDATE, então vamos sempre criar.
-            const response = await api.createPerson(personData);
-            alert(response.mensagem);
-            setPersonToEdit(null); // Limpa o modo de edição
-            loadPeople(); // Recarrega a lista
+            let response;
+            if (personToEdit) {
+                response = await api.updatePerson(personToEdit.cpf, personData);
+                alert(response.mensagem);
+                setPersonToEdit(null);
+            } else {
+                response = await api.createPerson(personData);
+                alert(response.mensagem);
+                setPersonToEdit(null);
+            }
+            loadPeople();
         } catch (error) {
             console.error("Erro ao salvar pessoa:", error);
             alert(`Falha ao salvar pessoa: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
@@ -47,7 +51,7 @@ function App() {
             try {
                 const response = await api.deletePerson(cpf);
                 alert(response.mensagem);
-                loadPeople(); // Recarrega a lista
+                loadPeople();
             } catch (error) {
                 console.error("Erro ao deletar pessoa:", error);
                 alert("Falha ao deletar pessoa.");

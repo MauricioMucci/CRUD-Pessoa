@@ -24,7 +24,7 @@ export interface PessoaOutputDTO {
     dataHoraUltimaAlteracaoRegistro: string; // Formato ISO 8601
 }
 
-export interface CreatePessoaDTO {
+export interface SavePessoaDTO {
     idPessoa: number;
     mensagem: string;
 }

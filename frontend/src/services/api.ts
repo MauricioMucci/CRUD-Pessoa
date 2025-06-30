@@ -1,4 +1,4 @@
-import type {PessoaInputDTO, PessoaOutputDTO, EnderecoDTO, CreatePessoaDTO, DeletePessoaDTO} from '../types';
+import type {PessoaInputDTO, PessoaOutputDTO, EnderecoDTO, SavePessoaDTO, DeletePessoaDTO} from '../types';
 
 const API_BASE_URL = 'http://localhost:8080';
 
@@ -57,7 +57,7 @@ export const fetchPersonByCpf = async (cpf: string): Promise<PessoaOutputDTO> =>
  * Cria uma nova pessoa.
  * POST /pessoa
  */
-export const createPerson = async (personData: PessoaInputDTO): Promise<CreatePessoaDTO> => {
+export const createPerson = async (personData: PessoaInputDTO): Promise<SavePessoaDTO> => {
     const response = await fetch(`${API_BASE_URL}/pessoa`, {
         method: 'POST',
         headers: {
@@ -65,7 +65,22 @@ export const createPerson = async (personData: PessoaInputDTO): Promise<CreatePe
         },
         body: JSON.stringify(personData),
     });
-    return handleResponse<CreatePessoaDTO>(response);
+    return handleResponse<SavePessoaDTO>(response);
+};
+
+/**
+ * Atualiza uma pessoa.
+ * PUT /pessoa
+ */
+export const updatePerson = async (cpf: string, personData: PessoaInputDTO): Promise<SavePessoaDTO> => {
+    const response = await fetch(`${API_BASE_URL}/pessoa/cpf/${cpf}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(personData),
+    });
+    return handleResponse<SavePessoaDTO>(response);
 };
 
 /**
