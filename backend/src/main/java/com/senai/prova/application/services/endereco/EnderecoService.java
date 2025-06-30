@@ -35,9 +35,9 @@ public class EnderecoService implements IEnderecoService {
     }
 
     @Override
-    public Optional<ViaCepDTO> getEnderecoByCep(String cep) {
+    public Optional<EnderecoDTO> getEnderecoByCep(String cep) {
         try {
-            return viaCepClient.getViaCepDTO(cep);
+            return viaCepClient.getViaCepDTO(cep).map(EnderecoDTO::new);
         } catch (IOException e) {
             throw new ServiceException(e.getMessage(), e);
         }

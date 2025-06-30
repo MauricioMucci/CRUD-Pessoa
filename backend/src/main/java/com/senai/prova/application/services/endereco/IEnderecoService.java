@@ -17,7 +17,7 @@ public interface IEnderecoService {
 
     Optional<Endereco> lookupEnderecoByPessoa(@Valid Pessoa pessoa);
 
-    Optional<ViaCepDTO> getEnderecoByCep(String cep);
+    Optional<EnderecoDTO> getEnderecoByCep(String cep);
 
     void create(@Valid Pessoa pessoa, @Valid EnderecoDTO enderecoDTO);
 }

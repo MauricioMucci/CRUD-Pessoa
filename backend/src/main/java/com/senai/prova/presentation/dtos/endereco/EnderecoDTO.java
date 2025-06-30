@@ -1,6 +1,7 @@
 package com.senai.prova.presentation.dtos.endereco;
 
 import com.senai.prova.domain.entities.Endereco;
+import com.senai.prova.infrastructure.utils.CepFormatter;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -22,6 +23,16 @@ public record EnderecoDTO(
                 endereco.getNumero(),
                 endereco.getCidade(),
                 endereco.getEstado()
+        );
+    }
+
+    public EnderecoDTO(ViaCepDTO viaCepDTO) {
+        this(
+                new CepFormatter(viaCepDTO.cep()).parse(),
+                viaCepDTO.rua(),
+                0,
+                viaCepDTO.cidade(),
+                viaCepDTO.estado()
         );
     }
 }

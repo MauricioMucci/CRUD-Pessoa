@@ -23,4 +23,11 @@ public class CepFormatter {
         }
         return this.cep.replaceAll("[^0-9]", "");
     }
+
+    public Integer parse() {
+        if (this.cep == null) {
+            throw new IllegalStateException("CEP não pode ser nulo");
+        }
+        return Integer.valueOf(this.cep.replaceAll("[^0-9]", ""));
+    }
 }
