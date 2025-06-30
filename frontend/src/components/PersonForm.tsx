@@ -50,7 +50,10 @@ export const PersonForm: React.FC<PersonFormProps> = ({ onSave, initialData }) =
     };
 
     const handleCepSearch = async () => {
-        if (String(formData.endereco.cep).length !== 8) return;
+        if (String(formData.endereco.cep).length !== 8) {
+            alert("O CEP deve conter 8 digítos. Por favor, verifique e tente novamente.");
+            return
+        };
         try {
             const addressData = await fetchAddressByCep(String(formData.endereco.cep));
             setFormData(prev => ({
@@ -63,7 +66,6 @@ export const PersonForm: React.FC<PersonFormProps> = ({ onSave, initialData }) =
                 },
             }));
         } catch (error) {
-            console.error("Erro ao buscar CEP:", error);
             alert("Não foi possível encontrar o CEP informado.");
         }
     };
@@ -88,7 +90,16 @@ export const PersonForm: React.FC<PersonFormProps> = ({ onSave, initialData }) =
                 <legend>Endereço</legend>
                 <div className="form-grid-address">
                     <div className="cep-container">
-                        <input name="cep" type="number" value={formData.endereco.cep || ''} onChange={handleAddressChange} placeholder="CEP" required />
+                        <input
+                            name="cep"
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            maxLength={8}
+                            value={formData.endereco.cep || ''}
+                            onChange={handleAddressChange}
+                            placeholder="CEP"
+                            required />
                         <button type="button" onClick={handleCepSearch} className="search-btn">🔍</button>
                     </div>
                     <input name="rua" value={formData.endereco.rua} onChange={handleAddressChange} placeholder="Rua" required />

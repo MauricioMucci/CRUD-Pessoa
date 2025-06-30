@@ -24,13 +24,6 @@ export interface PessoaOutputDTO {
     dataHoraUltimaAlteracaoRegistro: string; // Formato ISO 8601
 }
 
-export interface ViaCepDTO {
-    cep: string;
-    rua: string;
-    cidade: string;
-    estado: string;
-}
-
 export interface CreatePessoaDTO {
     idPessoa: number;
     mensagem: string;

@@ -1,4 +1,4 @@
-import type {PessoaInputDTO, PessoaOutputDTO, ViaCepDTO, CreatePessoaDTO, DeletePessoaDTO} from '../types';
+import type {PessoaInputDTO, PessoaOutputDTO, EnderecoDTO, CreatePessoaDTO, DeletePessoaDTO} from '../types';
 
 const API_BASE_URL = 'http://localhost:8080';
 
@@ -25,9 +25,9 @@ async function handleResponse<T>(response: Response): Promise<T | void> {
  * Busca o endereço a partir de um CEP.
  * GET /endereco/cep/{cep}
  */
-export const fetchAddressByCep = async (cep: string): Promise<ViaCepDTO> => {
+export const fetchAddressByCep = async (cep: string): Promise<EnderecoDTO> => {
     const response = await fetch(`${API_BASE_URL}/endereco/cep/${cep}`);
-    return handleResponse<ViaCepDTO>(response);
+    return handleResponse<EnderecoDTO>(response);
 };
 
 /**
