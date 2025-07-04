@@ -1,35 +1,77 @@
 services:
-  db:
-    image: postgres
-    container_name: senai-db
-    restart: on-failure
-    volumes:
-      - ./db-data:/var/lib/postgresql/data/
+
+  # Main Spring Boot application service
+  app:
+    build: .  # Build image from Dockerfile in current directory
+    container_name: senai-app  # Custom container name for easy identification
+    restart: on-failure  # Restart policy: only restart if container exits with error
+    ports:
+      - "8080:8080"  # Port mapping: host:container (expose app on localhost:8080)
+    depends_on: # Service dependencies - wait for these services to be healthy before starting
+      api-db:
+        condition: service_healthy  # Wait for database health check to pass
+      rabbitmq:
+        condition: service_healthy  # Wait for RabbitMQ health check to pass
+    environment: # Environment variables passed to the Spring Boot application
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-default}
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL:-jdbc:postgresql://api-db:5432/senai}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-root}
+      - SPRING_RABBITMQ_HOST=rabbitmq  # Service name resolution within Docker network
+      - SPRING_RABBITMQ_PORT=5672      # Standard AMQP port
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USER:-guest}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD:-guest}
+    networks: # Connect to custom network for service-to-service communication
+      - senai-network
+
+  # PostgreSQL database service
+  api-db:
+    image: postgres:15-alpine  # Alpine Linux version for smaller image size
+    container_name: senai-api-db  # Custom container name
+    restart: on-failure  # Restart policy
+    volumes: # Volume mounts for data persistence and initialization
+      # Persist database data on host machine (survives container restarts)
+      - db-data:/var/lib/postgresql/data/
+      # Mount SQL script to initialize database schema on first run
       - ./initial-dump.sql:/docker-entrypoint-initdb.d/init.sql
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: senai
-    ports:
+    environment: # PostgreSQL configuration via environment variables
+      POSTGRES_DB: ${POSTGRES_DB:-senai}
+      POSTGRES_USER: ${POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-root}
+    healthcheck: # Health check configuration - monitors database availability
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-root} -d ${POSTGRES_DB:-senai}" ]
+      interval: 10s  # Check every 10 seconds
+      timeout: 5s    # Timeout after 5 seconds
+      retries: 5     # Try 5 times before marking as unhealthy
+    ports: # Expose database port (useful for external connections during development)
       - "5432:5432"
-    networks:
+    networks: # Connect to custom network
       - senai-network
 
+  # RabbitMQ message broker service
   rabbitmq:
-    image: rabbitmq:3-management
-    container_name: senai-rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+    image: rabbitmq:3-management-alpine  # Includes web management interface
+    container_name: senai-rabbitmq  # Custom container name
+    ports: # Port mappings for RabbitMQ services
+      - "5672:5672"   # AMQP protocol port for application connections
+      - "15672:15672" # Web management interface (http://localhost:15672)
     environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-    networks:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:-guest}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:-guest}
+    healthcheck: # Health check to ensure RabbitMQ is ready
+      test: rabbitmq-diagnostics -q ping  # Simple ping test
+      interval: 30s  # Check every 30 seconds
+      timeout: 30s   # Timeout after 30 seconds
+      retries: 3     # Try 3 times before marking as unhealthy
+    networks: # Connect to custom network
       - senai-network
 
+# Named volumes for data persistence
 volumes:
   db-data:
-    name: senai-db
+    name: senai-api-db  # Custom volume name for easier identification
+
+# Custom networks for service isolation and communication
 networks:
   senai-network:
-    driver: bridge
+    driver: bridge  # Bridge network allows containers to communicate via service names
