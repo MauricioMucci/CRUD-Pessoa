@@ -39,7 +39,6 @@ out
 target
 
 db-data/
-mvnw*
 
 # Logs
 logs
