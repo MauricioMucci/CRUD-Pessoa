@@ -1,0 +1,56 @@
+
+# Stage 1: Build da aplicação
+FROM eclipse-temurin:21 AS builder
+
+# Definir diretório de trabalho
+WORKDIR /app
+
+# Copiar arquivos do Maven para cache de dependências
+COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw .
+
+# Dar permissão de execução ao Maven wrapper
+RUN chmod +x ./mvnw
+
+# Baixar dependências (aproveitando cache do Docker)
+RUN ./mvnw dependency:go-offline -B
+
+# Copiar código fonte
+COPY src ./src
+
+# Compilar e empacotar a aplicação
+RUN ./mvnw clean package -DskipTests -B
+
+# Stage 2: Runtime da aplicação
+FROM eclipse-temurin:21-jre
+
+# Criar usuário não-root para segurança
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+# Definir diretório de trabalho
+WORKDIR /app
+
+# Copiar o JAR da aplicação do stage anterior
+COPY --from=builder /app/target/*.jar app.jar
+
+# Alterar propriedade do arquivo para o usuário appuser
+RUN chown appuser:appuser app.jar
+
+# Mudar para usuário não-root
+USER appuser
+
+# Definir timezone (conforme configurado na aplicação)
+ENV TZ=America/Sao_Paulo
+
+# Configurar profile padrão (pode ser sobrescrito)
+ENV SPRING_PROFILES_ACTIVE=prod
+
+# Expor porta da aplicação (Spring Boot padrão)
+EXPOSE 8080
+
+# Configurar JVM options para container
+ENV JAVA_OPTS="-Xmx512m -Xms256m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
+
+# Comando para executar a aplicação
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Dspring.profiles.active=${SPRING_PROFILES_ACTIVE} -Djava.security.egd=file:/dev/./urandom -jar app.jar"]

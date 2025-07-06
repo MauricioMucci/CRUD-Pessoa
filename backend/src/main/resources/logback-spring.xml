@@ -33,6 +33,13 @@
         </encoder>
     </appender>
 
+    <!-- Google Cloud Logging Appender -->
+    <appender name="CLOUD" class="com.google.cloud.logging.logback.LoggingAppender">
+        <log>crud_pessoa_log</log>
+        <resourceType>cloud_run_revision</resourceType>
+        <enhancer>com.google.cloud.logging.logback.MDCEventEnhancer</enhancer>
+    </appender>
+
     <springProfile name="default">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
@@ -46,5 +53,12 @@
             <appender-ref ref="CONSOLE"/>
         </root>
         <logger name="com.senai.prova" level="TRACE"/>
+    </springProfile>
+
+    <springProfile name="prod">
+        <root level="WARN">
+            <appender-ref ref="CLOUD"/>
+        </root>
+        <logger name="com.senai.prova" level="INFO"/>
     </springProfile>
 </configuration>
